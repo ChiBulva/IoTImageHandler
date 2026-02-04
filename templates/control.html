@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Control Panel</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .info {
+            background-color: #e7f3fe;
+            border-left: 4px solid #2196F3;
+            padding: 10px;
+            margin: 20px 0;
+        }
+        .screen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .screen-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .screen-card h3 {
+            margin-top: 0;
+            color: #2196F3;
+        }
+        .screen-link {
+            display: block;
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Display Control Panel</h1>
+    
+    <div class="info">
+        <strong>Supported formats:</strong> {{ supported_types }}<br>
+        <strong>Base path:</strong> <code id="base-path">Loading...</code>
+    </div>
+
+    <div class="screen-grid">
+        {% for screen in screens %}
+        <div class="screen-card">
+            <h3>{{ screen }}</h3>
+            <a class="screen-link" href="/{{ screen }}/display" target="_blank">
+                🔗 /{{ screen }}/display
+            </a>
+            
+            <div id="message-{{ screen }}" class="message"></div>
+            
+            <form onsubmit="submitImage('{{ screen }}'); return false;">
+                <input 
+                    type="text" 
+                    id="input-{{ screen }}" 
+                    placeholder="Enter image name..."
+                    required
+                >
+                <button type="submit">Display Image</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        const socket = io();
+
+        function submitImage(screenName) {
+            const input = document.getElementById(`input-${screenName}`);
+            const message = document.getElementById(`message-${screenName}`);
+            const imageName = input.value.trim();
+
+            if (!imageName) return;
+
+            socket.emit('manual_submit', {
+                screen_name: screenName,
+                image_name: imageName
+            });
+
+            message.style.display = 'block';
+            message.className = 'message';
+            message.textContent = 'Sending...';
+        }
+
+        socket.on('success', (data) => {
+            const screenName = data.message.match(/on (\w+)/)[1];
+            const message = document.getElementById(`message-${screenName}`);
+            message.className = 'message success';
+            message.textContent = data.message;
+            message.style.display = 'block';
+            
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000);
+        });
+
+        socket.on('error', (data) => {
+            // Find which screen had the error by checking the message content
+            document.querySelectorAll('.message').forEach(msg => {
+                if (msg.textContent === 'Sending...') {
+                    msg.className = 'message error';
+                    msg.textContent = data.message;
+                    msg.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        msg.style.display = 'none';
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

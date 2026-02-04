@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .input-container {
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .info {
+            background-color: #e7f3fe;
+            border-left: 4px solid #2196F3;
+            padding: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Display System</h1>
+    <div class="info">
+        <strong>Supported formats:</strong> {{ supported_types }}
+    </div>
+    <div class="input-container">
+        <form action="/display" method="POST">
+            <label for="image_name">Enter Image Name:</label><br><br>
+            <input type="text" id="image_name" name="image_name" placeholder="example (with or without extension)">
+            <button type="submit">Display Image</button>
+        </form>
+    </div>
+    <p><small>Note: File extension is optional. The system will search for all supported formats.</small></p>
+</body>
+</html>

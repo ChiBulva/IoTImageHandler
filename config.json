@@ -1,0 +1,26 @@
+{
+  "screens": [
+    "Display 1",
+    "Display 2"
+  ],
+  "image_base_path": "./static/images",
+  "supported_extensions": [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".bmp",
+    ".webp"
+  ],
+  "server": {
+    "host": "0.0.0.0",
+    "port": 5000,
+    "debug": true
+  },
+  "display": {
+    "screen_name_size": "20px",
+    "image_name_size": "18px",
+    "max_image_height": "calc(100vh - 120px)",
+    "max_image_width": "98vw"
+  }
+}

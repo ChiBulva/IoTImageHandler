@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            font-size: 18px;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Display</h1>
+    {% if found %}
+        <h2>{{ image_name }}</h2>
+        <img src="/get-image/{{ image_name }}" alt="{{ image_name }}">
+    {% else %}
+        <p class="error">Image "{{ image_name }}" not found!</p>
+    {% endif %}
+    <br>
+    <a href="/">← Back to Search</a>
+</body>
+</html>
