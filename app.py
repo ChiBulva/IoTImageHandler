@@ -87,7 +87,7 @@ def display_screen(screen_name):
     """Individual display screen"""
     if screen_name not in SCREENS:
         return f"Screen '{screen_name}' not configured", 404
-    return render_template('display_screen.html', screen_name=screen_name, config=CONFIG.get('display', {}))
+    return render_template('display_screen.html', screen_name=screen_name, config=CONFIG.get('display', {}), timing=CONFIG.get('timing', {'warning': 20, 'over': 50}))
 
 @app.route('/api/display', methods=['POST'])
 def api_display_image():

@@ -22,5 +22,9 @@
     "image_name_size": "18px",
     "max_image_height": "calc(100vh - 120px)",
     "max_image_width": "98vw"
+  },
+  "timing": {
+    "warning": 5,
+    "over": 10
   }
 }
